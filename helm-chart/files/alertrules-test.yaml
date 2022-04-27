@@ -1,0 +1,27 @@
+rule_files:
+- alertrules.yaml
+
+evaluation_interval: 1m
+
+tests:
+- interval: 1m
+  input_series:
+  - series: 'myapp_processed_ops_total{pod="replica1",namespace="default"}'
+    values: '1 2 3 4 5 6 7 8 9 10 11'
+  - series: 'myapp_processed_ops_total{pod="replica2",namespace="default"}'
+    values: '10 20 30 40 50 50 50 50 50 50 50'          
+  alert_rule_test:
+  # Test no alert at 5 minute
+  - eval_time: 5m
+    alertname: OperationStop
+  # Test alert happens at 11 minute
+  - eval_time: 11m
+    alertname: OperationStop
+    exp_alerts:
+    - exp_labels:
+        pod: replica2
+        namespace: default
+        severity: critical
+      exp_annotations:
+        summary: simple-http operation stopped
+        description: "default namespace, simple-http pod replica2 operation stopped for more than 5 minutes"

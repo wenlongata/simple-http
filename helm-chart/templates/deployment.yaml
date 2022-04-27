@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: simple-http
+  name: simple-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-http
+  template:
+    metadata:
+      labels:
+        app: simple-http
+    spec:
+      containers:
+      - image: "simple-http:{{ .Values.image.tag }}"
+        name: simple-http
+        ports:
+        - name: web
+          containerPort: 8080

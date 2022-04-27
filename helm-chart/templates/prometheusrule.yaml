@@ -1,0 +1,8 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: simple-http
+  labels:
+    app: simple-http
+spec:
+{{ .Files.Get "files/alertrules.yaml" | indent 2 }}

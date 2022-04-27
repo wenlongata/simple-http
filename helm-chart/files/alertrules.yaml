@@ -1,0 +1,11 @@
+groups:
+- name: simple-http
+  rules:
+  - alert: OperationStop
+    expr: increase(myapp_processed_ops_total[2m]) == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "simple-http operation stopped"
+      description: "{{ $labels.namespace }} namespace, simple-http pod {{ $labels.pod }} operation stopped for more than 5 minutes"
